@@ -261,7 +261,7 @@ for arg in "$@"; do
   case "$arg" in
     "--help") 		set -- "$@" "-h" ;;
     "--path") 		set -- "$@" "-p" ;;
-	"--install")	set -- "$@" "-i" ;;
+    "--install")	set -- "$@" "-i" ;;
     *)        		set -- "$@" "$arg"
   esac
 done
