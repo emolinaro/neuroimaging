@@ -134,15 +134,14 @@ echo "Downloading Miniconda installer ..." \
 && curl -fsSL --retry 5 -o "$conda_installer" https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh \
 && bash "$conda_installer" -b -p "${CONDA_DIR}" \
 && rm -f "$conda_installer" \
-&& conda update -yq -nbase conda \
-&& conda config --system --prepend channels conda-forge \
+&& conda config --system --add channels conda-forge \
+&& conda config --system --add channels bioconda \
 && conda config --system --set auto_update_conda false \
 && conda config --system --set show_channel_urls true \
 && sync && conda clean -y --all && sync \
 && conda create -y -q --name neuro \
 && conda install -y -q --name neuro \
        "jupyter" \
-       "python=3.7" \
        "traits" \
        "numpy" \
        "pandas" \
