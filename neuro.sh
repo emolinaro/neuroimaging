@@ -132,7 +132,7 @@ source "${MAIN_DIR}/${env}"
 echo "Downloading Miniconda installer ..." \
 && conda_installer="/tmp/miniconda.sh" \
 && curl -fsSL --retry 5 -o "$conda_installer" https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh \
-&& bash "$conda_installer" -u -b -p "${CONDA_DIR}" \
+&& bash "$conda_installer" -b -p "${CONDA_DIR}" \
 && rm -f "$conda_installer" \
 && conda update -yq -nbase conda \
 && conda config --system --prepend channels conda-forge \
