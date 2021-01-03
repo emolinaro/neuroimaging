@@ -38,7 +38,7 @@ OPTIONS:
 
 ## License
 
-The code for the software installation functions is generated suing the [Neurodocker](https://github.com/ReproNim/neurodocker) command-line program. 
+The code for the software installation functions is generated via the [Neurodocker](https://github.com/ReproNim/neurodocker) command-line program. 
 
 
 
