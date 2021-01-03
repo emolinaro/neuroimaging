@@ -26,7 +26,7 @@ MINICONDA_VERSION=${MINICONDA_VERSION:="latest"}
 ## FreeSurfer ##
 install_freesurfer() {
 
-env="${FUNCNAME[0]/install/env}.sh"
+env="${FUNCNAME[0]/install/env}-${FREESURFER_VERSION}.sh"
 
 ## Set environment
 { echo export FREESURFER_VERSION=${FREESURFER_VERSION}; \
@@ -71,7 +71,7 @@ printf "\nDownloading FreeSurfer ..." \
 ## FSL ##
 install_fsl() {
 
-env="${FUNCNAME[0]/install/env}.sh"
+env="${FUNCNAME[0]/install/env}-${FSL_VERSION}.sh"
 
 ## Set environment
 { echo export FSLDIR="${MAIN_DIR}/fsl-${FSL_VERSION}"; \
@@ -121,7 +121,7 @@ printf "\nDownloading FSL ..." \
 ## MINICONDA ##
 install_conda() {
 
-env="${FUNCNAME[0]/install/env}.sh"
+env="${FUNCNAME[0]/install/env}-${MINICONDA_VERSION}.sh"
 
 ## Set environment
 { echo export CONDA_DIR="${MAIN_DIR}/miniconda-${MINICONDA_VERSION}"; \
@@ -158,7 +158,7 @@ echo "Downloading Miniconda installer ..." \
 ## MATLAB Runtime ##
 install_matlabmcr() {
 
-env="${FUNCNAME[0]/install/env}.sh"
+env="${FUNCNAME[0]/install/env}-${MATLAB_RELEASE}.sh"
 
 ## Set environment
 { echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; \
@@ -196,9 +196,10 @@ install_spm12() {
     if [ -d "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}" ]
     then
     	printf "MATLAB Runtime is already installed in %s\n" "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}"
-    	source "${MAIN_DIR}/env_matlabmcr.sh"
+    	source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
     else
     	install_matlabmcr
+    	source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
     fi
 
     env="${FUNCNAME[0]/install/env}.sh"
