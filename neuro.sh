@@ -37,12 +37,12 @@ env="${FUNCNAME[0]/install/env}-${FREESURFER_VERSION}.sh"
 cat >> "${MAIN_DIR}/${env}" << EOF
 sudo apt-get update -qq \
 && sudo apt-get install -y -qq --no-install-recommends \
-       	bc \
-       	libgomp1 \
-       	libxmu6 \
-       	libxt6 \
-       	perl \
-       	tcsh \
+        bc \
+        libgomp1 \
+        libxmu6 \
+        libxt6 \
+        perl \
+        tcsh \
 && sudo apt-get clean \
 && sudo rm -rf /var/lib/apt/lists/*
 EOF
@@ -88,23 +88,23 @@ env="${FUNCNAME[0]/install/env}-${FSL_VERSION}.sh"
 cat >> "${MAIN_DIR}/${env}" << EOF
 sudo apt-get update -qq \
 && sudo apt-get install -y -qq --no-install-recommends \
-       	bc \
-       	dc \
-       	file \
-       	libfontconfig1 \
-       	libfreetype6 \
-       	libgl1-mesa-dev \
-       	libgl1-mesa-dri \
-       	libglu1-mesa-dev \
-       	libgomp1 \
-      	libice6 \
-       	libxcursor1 \
-       	libxft2 \
-      	libxinerama1 \
-       	libxrandr2 \
-       	libxrender1 \
-       	libxt6 \
-       	wget \
+        bc \
+        dc \
+        file \
+        libfontconfig1 \
+        libfreetype6 \
+        libgl1-mesa-dev \
+        libgl1-mesa-dri \
+        libglu1-mesa-dev \
+        libgomp1 \
+        libice6 \
+        libxcursor1 \
+        libxft2 \
+        libxinerama1 \
+        libxrandr2 \
+        libxrender1 \
+        libxt6 \
+        wget \
 && sudo apt-get clean \
 && sudo rm -rf /var/lib/apt/lists/*
 EOF
@@ -167,12 +167,12 @@ env="${FUNCNAME[0]/install/env}-${MATLAB_RELEASE}.sh"
 cat >> "${MAIN_DIR}/${env}" << EOF
 sudo apt-get update -qq \
 && sudo apt-get install -y -q --no-install-recommends \
-       	bc \
-       	libncurses5 \
-       	libxext6 \
-       	libxmu6 \
-       	libxpm-dev \
-       	libxt6 \
+        bc \
+        libncurses5 \
+        libxext6 \
+        libxmu6 \
+        libxpm-dev \
+        libxt6 \
 && sudo apt-get clean \
 && sudo rm -rf /var/lib/apt/lists/*
 EOF
@@ -195,11 +195,11 @@ install_spm12() {
 
     if [ -d "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}" ]
     then
-    	printf "MATLAB Runtime is already installed in %s\n" "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}"
-    	source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
+        printf "MATLAB Runtime is already installed in %s\n" "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}"
+        source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
     else
-    	install_matlabmcr
-    	source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
+        install_matlabmcr
+        source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
     fi
 
     env="${FUNCNAME[0]/install/env}.sh"
@@ -233,16 +233,16 @@ DESCRIPTION
 
 OPTIONS:
 -p, --path
-		Specify installation path (default is: /work/neuro-software).
+        Specify installation path (default is: /work/neuro-software).
 -i, --install
-		Specify software name from the following list:
-		- conda 
-		- freesurfer
-		- fsl
-		- matlabmcr
-		- spm12
+        Specify software name from the following list:
+        - conda 
+        - freesurfer
+        - fsl
+        - matlabmcr
+        - spm12
 -h, --help
-		Print command usage options.
+        Print command usage options.
 
 USAGE_TEXT
 
@@ -259,42 +259,42 @@ clean_up() {
 for arg in "$@"; do
   shift
   case "$arg" in
-    "--help") 		set -- "$@" "-h" ;;
-    "--path") 		set -- "$@" "-p" ;;
-    "--install")	set -- "$@" "-i" ;;
-    *)        		set -- "$@" "$arg"
+    "--help")       set -- "$@" "-h" ;;
+    "--path")       set -- "$@" "-p" ;;
+    "--install")    set -- "$@" "-i" ;;
+    *)              set -- "$@" "$arg"
   esac
 done
 
 ## Available options
 while getopts "hp:i:" option
 do
-	case "${option}" 
-   	in
-   		h) 	## Display help message
-        	usage
-        	exit;;
-       	p) 	## Change default installation path
-			MAIN_DIR=${OPTARG}
-			mkdir -p "$MAIN_DIR";;
-		i) 	## Install new software
-			CMD=install_${OPTARG}
-			if [ "$(type -t "$CMD")" != 'function' ]
-			then
-  				printf "Error: %s installation function not available.\n\n" "${OPTARG}" >&2
-  				usage
-  				exit
-  			else
-  				printf "\nInstall new software ...\n\n"
-  				mkdir -p "${MAIN_DIR}"
-  				$CMD
-  				printf "\n\nSoftware installed.\n\n"
-  			fi;;
-     	\?) ## Invalid option
-        	printf "Error: invalid option.\n\n"
-         	usage
-         	exit;;
-   	esac
+    case "${option}" 
+    in
+        h)  ## Display help message
+            usage
+            exit;;
+        p)  ## Change default installation path
+            MAIN_DIR=${OPTARG}
+            mkdir -p "$MAIN_DIR";;
+        i)  ## Install new software
+            CMD=install_${OPTARG}
+            if [ "$(type -t "$CMD")" != 'function' ]
+            then
+                printf "Error: %s installation function not available.\n\n" "${OPTARG}" >&2
+                usage
+                exit
+            else
+                printf "\nInstall new software ...\n\n"
+                mkdir -p "${MAIN_DIR}"
+                $CMD
+                printf "\n\nSoftware installed.\n\n"
+            fi;;
+        \?) ## Invalid option
+            printf "Error: invalid option.\n\n"
+            usage
+            exit;;
+    esac
 done
 
 # shift "$((OPTIND-1))" # remove options from positional parameters
