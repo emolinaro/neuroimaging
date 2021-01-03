@@ -8,14 +8,15 @@ MAIN_DIR="/work/neuro-software"
 readonly script_name="${0##*/}"
 
 
-#######################
-## SOFTWARE RELEASES ##
-#######################
+######################
+## SOFTWARE VERSION ##
+######################
 FREESURFER_VERSION=${FREESURFER_VERSION:="7.1.1"}
 FSL_VERSION=${FSL_VERSION:="6.0.4"}
 MATLAB_VERSION=${MATLAB_VERSION:="99"}
 MATLAB_RELEASE=${MATLAB_RELEASE:="2020b"}
 MATLAB_UPDATE=${MATLAB_UPDATE:="3"}
+MINICONDA_VERSION=${MINICONDA_VERSION:="latest"}
 
 
 #####################################
@@ -123,14 +124,14 @@ install_conda() {
 env="${FUNCNAME[0]/install/env}.sh"
 
 ## Set environment
-{ echo export CONDA_DIR="${MAIN_DIR}/miniconda-latest"; \
-  echo export PATH="${MAIN_DIR}/miniconda-latest/bin:\$PATH"; } > "${MAIN_DIR}/${env}"
+{ echo export CONDA_DIR="${MAIN_DIR}/miniconda-${MINICONDA_VERSION}"; \
+  echo export PATH="${MAIN_DIR}/miniconda-${MINICONDA_VERSION}/bin:\$PATH"; } > "${MAIN_DIR}/${env}"
 
 source "${MAIN_DIR}/${env}"
 
 echo "Downloading Miniconda installer ..." \
 && conda_installer="/tmp/miniconda.sh" \
-&& curl -fsSL --retry 5 -o "$conda_installer" https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+&& curl -fsSL --retry 5 -o "$conda_installer" https://repo.continuum.io/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh \
 && bash "$conda_installer" -u -b -p "${CONDA_DIR}" \
 && rm -f "$conda_installer" \
 && conda update -yq -nbase conda \
@@ -160,7 +161,7 @@ install_matlabmcr() {
 env="${FUNCNAME[0]/install/env}.sh"
 
 ## Set environment
-{ echo export LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; \
+{ echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; \
   echo export MATLABCMD="${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/toolbox/matlab"; } > "${MAIN_DIR}/${env}"
 
 cat >> "${MAIN_DIR}/${env}" << EOF
@@ -249,7 +250,7 @@ USAGE_TEXT
 clean_up() {
     ## Remove temporary files/directories, log files or rollback changes.
     trap - ERR EXIT SIGINT SIGTERM
-    rm -rf /tmp/*
+    sudo rm -rf /tmp/*
 }
 
 

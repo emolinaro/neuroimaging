@@ -2,7 +2,7 @@
 
 This program install neuroimaging software tools on Ubuntu based machines.
 
-On UCloud the script was tested using the apps [Ubuntu VDE](https://docs.cloud.sdu.dk/Apps/ubuntu.html) and [Terminal Ubuntu](https://docs.cloud.sdu.dk/Apps/terminal.html).
+On UCloud the script was tested using the apps [Ubuntu Xfce](https://docs.cloud.sdu.dk/Apps/ubuntu.html) and [Terminal Ubuntu](https://docs.cloud.sdu.dk/Apps/terminal.html).
 
 
 ## Usage
