@@ -205,7 +205,8 @@ env="${FUNCNAME[0]/install/env}-${SPM12_VERSION}.sh"
 { echo export FORCE_SPMMCR="1"; \
   echo export SPM_HTML_BROWSER="0"; \
   echo export PATH="${MAIN_DIR}/spm12-${SPM12_VERSION}:\$PATH"; \
-  echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; } > "${MAIN_DIR}/${env}"
+  echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; \
+  echo export MATLABCMD="${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/toolbox/matlab"; } > "${MAIN_DIR}/${env}"
 
 cat >> "${MAIN_DIR}/${env}" << EOF
 sudo apt-get update -qq \
