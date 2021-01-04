@@ -39,7 +39,7 @@ neuro-software/
 |-- env_fsl-6.0.4.sh
 |-- env_matlabmcr-2019b.sh
 |-- env_matlabmcr-2020b.sh
-|-- env_spm12.sh
+|-- env_spm12-r7771.sh
 |-- freesurfer-7.1.1/
 |-- fsl-6.0.4/
 |-- matlabmcr-2019b/
