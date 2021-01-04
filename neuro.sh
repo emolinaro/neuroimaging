@@ -84,7 +84,8 @@ env="${FUNCNAME[0]/install/env}-${FSL_VERSION}.sh"
   echo export FSLLOCKDIR=""; \
   echo export FSLMACHINELIST=""; \
   echo export FSLREMOTECALL=""; \
-  echo export FSLGECUDAQ="cuda.q"; } > "${MAIN_DIR}/${env}"
+  echo export FSLGECUDAQ="cuda.q"; \
+  echo export USER="ucloud"; } > "${MAIN_DIR}/${env}"
 
 cat >> "${MAIN_DIR}/${env}" << EOF
 sudo apt-get update -qq \
