@@ -202,6 +202,7 @@ MATLAB_UPDATE="1"
 
 { echo export FORCE_SPMMCR="1"; \
   echo export SPM_HTML_BROWSER="0"; \
+  echo export PATH="${MAIN_DIR}/spm12:\$PATH"; \
   echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; } > "${MAIN_DIR}/${env}"
 
 cat >> "${MAIN_DIR}/${env}" << EOF
@@ -227,7 +228,7 @@ fi
 
 source "${MAIN_DIR}/${env}" 
 
-printf "\nDownloading standalone SPM12 ..." \
+printf "\nDownloading standalone SPM12 ...\n" \
 && curl -fsSL --retry 5 -o /tmp/spm12.zip http://www.fil.ion.ucl.ac.uk/spm/download/restricted/utopia/dev/spm12_r7771_Linux_R2019b.zip \
 && unzip -qq /tmp/spm12.zip -d /tmp \
 && mkdir -p ${MAIN_DIR}/spm12 \
