@@ -13,9 +13,9 @@ readonly script_name="${0##*/}"
 ######################
 FREESURFER_VERSION=${FREESURFER_VERSION:="7.1.1"}
 FSL_VERSION=${FSL_VERSION:="6.0.4"}
-MATLAB_VERSION=${MATLAB_VERSION:="99"}
-MATLAB_RELEASE=${MATLAB_RELEASE:="2020b"}
-MATLAB_UPDATE=${MATLAB_UPDATE:="3"}
+MATLAB_VERSION=${MATLAB_VERSION:="97"}
+MATLAB_RELEASE=${MATLAB_RELEASE:="2019b"}
+MATLAB_UPDATE=${MATLAB_UPDATE:="1"}
 MINICONDA_VERSION=${MINICONDA_VERSION:="latest"}
 
 
@@ -166,7 +166,7 @@ env="${FUNCNAME[0]/install/env}-${MATLAB_RELEASE}.sh"
 
 cat >> "${MAIN_DIR}/${env}" << EOF
 sudo apt-get update -qq \
-&& sudo apt-get install -y -q --no-install-recommends \
+&& sudo apt-get install -y -qq --no-install-recommends \
         bc \
         libncurses5 \
         libxext6 \
@@ -193,30 +193,50 @@ TMPDIR="$(mktemp -d)" \
 ## SPM12 ##
 install_spm12() {
 
-    if [ -d "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}" ]
-    then
-        printf "MATLAB Runtime is already installed in %s\n" "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}"
-        source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
-    else
-        install_matlabmcr
-        source "${MAIN_DIR}/env_matlabmcr-${MATLAB_RELEASE}.sh"
-    fi
+env="${FUNCNAME[0]/install/env}.sh"
 
-    env="${FUNCNAME[0]/install/env}.sh"
+MATLAB_VERSION="97"
+MATLAB_RELEASE="2019b"
+MATLAB_UPDATE="1"
 
-    { echo export FORCE_SPMMCR="1"; \
-      echo export SPM_HTML_BROWSER="0"; } > "${MAIN_DIR}/${env}"
+{ echo export FORCE_SPMMCR="1"; \
+  echo export SPM_HTML_BROWSER="0"; \
+  echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; } > "${MAIN_DIR}/${env}"
 
-    source "${MAIN_DIR}/${env}"
+cat >> "${MAIN_DIR}/${env}" << EOF
+sudo apt-get update -qq \
+&& sudo apt-get install -y -qq --no-install-recommends \
+        bc \
+        libncurses5 \
+        libxext6 \
+        libxmu6 \
+        libxpm-dev \
+        libxt6 \
+&& sudo apt-get clean \
+&& sudo rm -rf /var/lib/apt/lists/*
+EOF
 
-    printf "\nDownloading standalone SPM12 ..." \
-    && curl -fsSL --retry 5 -o /tmp/spm12.zip  https://www.fil.ion.ucl.ac.uk/spm/download/restricted/eldorado/spm12.zip \
-    && unzip -qq /tmp/spm12.zip -d /tmp \
-    && mkdir -p ${MAIN_DIR}/spm12 \
-    && mv /tmp/spm12/* ${MAIN_DIR}/spm12 \
-    && chmod -R 775 ${MAIN_DIR}/spm12 \
-    && rm -rf /tmp/spm*
+if [ -d "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}" ]
+then
+    printf "MATLAB Runtime is already installed in %s\n" "${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}"
+else
+    printf "Install MATLAB Runtime R%s\n\n" "${MATLAB_RELEASE}"
+    install_matlabmcr
+fi
+
+source "${MAIN_DIR}/${env}" 
+
+printf "\nDownloading standalone SPM12 ..." \
+&& curl -fsSL --retry 5 -o /tmp/spm12.zip http://www.fil.ion.ucl.ac.uk/spm/download/restricted/utopia/dev/spm12_r7771_Linux_R2019b.zip \
+&& unzip -qq /tmp/spm12.zip -d /tmp \
+&& mkdir -p ${MAIN_DIR}/spm12 \
+&& mv /tmp/spm12/* ${MAIN_DIR}/spm12 \
+&& chmod -R 775 ${MAIN_DIR}/spm12 \
+&& rm -rf /tmp/spm* \
+&& ${MAIN_DIR}/spm12/run_spm12.sh ${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION} quit
+
 }
+
 
 ###################################
 ## SOFTWARE INSTALLATION OPTIONS ##
@@ -252,6 +272,7 @@ clean_up() {
     ## Remove temporary files/directories, log files or rollback changes.
     trap - ERR EXIT SIGINT SIGTERM
     sudo rm -rf /tmp/*
+    touch /tmp/passwd
 }
 
 
