@@ -8,9 +8,9 @@ MAIN_DIR="/work/neuro-software"
 readonly script_name="${0##*/}"
 
 
-######################
-## SOFTWARE VERSION ##
-######################
+##############################
+## DEFAULT SOFTWARE VERSION ##
+##############################
 FREESURFER_VERSION=${FREESURFER_VERSION:="7.1.1"}
 FSL_VERSION=${FSL_VERSION:="6.0.4"}
 MATLAB_VERSION=${MATLAB_VERSION:="97"}
@@ -121,7 +121,7 @@ printf "\nDownloading FSL ..." \
 }
 
 ## MINICONDA ##
-install_conda() {
+install_miniconda() {
 
 env="${FUNCNAME[0]/install/env}-${MINICONDA_VERSION}.sh"
 
@@ -194,16 +194,17 @@ TMPDIR="$(mktemp -d)" \
 ## SPM12 ##
 install_spm12() {
 
+## Install a standalone version of SPM12 compiled with MATLAB R2019b
 MATLAB_VERSION="97"
 MATLAB_RELEASE="2019b"
 MATLAB_UPDATE="1"
 SPM12_VERSION="r7771"
 
-env="${FUNCNAME[0]/install/env}-$SPM12_VERSION.sh"
+env="${FUNCNAME[0]/install/env}-${SPM12_VERSION}.sh"
 
 { echo export FORCE_SPMMCR="1"; \
   echo export SPM_HTML_BROWSER="0"; \
-  echo export PATH="${MAIN_DIR}/spm12-$SPM12_VERSION:\$PATH"; \
+  echo export PATH="${MAIN_DIR}/spm12-${SPM12_VERSION}:\$PATH"; \
   echo export LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/runtime/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/bin/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/sys/os/glnxa64:${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION}/extern/bin/glnxa64"; } > "${MAIN_DIR}/${env}"
 
 cat >> "${MAIN_DIR}/${env}" << EOF
@@ -230,13 +231,13 @@ fi
 source "${MAIN_DIR}/${env}" 
 
 printf "\nDownloading standalone SPM12 ...\n" \
-&& curl -fsSL --retry 5 -o /tmp/spm12.zip http://www.fil.ion.ucl.ac.uk/spm/download/restricted/utopia/dev/spm12_r7771_Linux_R2019b.zip \
+&& curl -fsSL --retry 5 -o /tmp/spm12.zip http://www.fil.ion.ucl.ac.uk/spm/download/restricted/utopia/dev/spm12_${SPM12_VERSION}_Linux_R${MATLAB_RELEASE}.zip \
 && unzip -qq /tmp/spm12.zip -d /tmp \
-&& mkdir -p ${MAIN_DIR}/spm12-$SPM12_VERSION \
-&& mv /tmp/spm12/* ${MAIN_DIR}/spm12-$SPM12_VERSION \
-&& chmod -R 775 ${MAIN_DIR}/spm12-$SPM12_VERSION \
+&& mkdir -p ${MAIN_DIR}/spm12-${SPM12_VERSION} \
+&& mv /tmp/spm12/* ${MAIN_DIR}/spm12-${SPM12_VERSION} \
+&& chmod -R 775 ${MAIN_DIR}/spm12-${SPM12_VERSION} \
 && rm -rf /tmp/spm* \
-&& ${MAIN_DIR}/spm12-$SPM12_VERSION/run_spm12.sh ${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION} quit
+&& ${MAIN_DIR}/spm12-${SPM12_VERSION}/run_spm12.sh ${MAIN_DIR}/matlabmcr-${MATLAB_RELEASE}/v${MATLAB_VERSION} quit
 
 }
 
@@ -259,10 +260,10 @@ OPTIONS:
         Specify the installation path (default is: /work/neuro-software).
 -i, --install
         Specify software name from the following list:
-        - conda 
         - freesurfer
         - fsl
         - matlabmcr
+        - miniconda
         - spm12
 -h, --help
         Print command usage options.
