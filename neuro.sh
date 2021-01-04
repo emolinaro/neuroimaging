@@ -53,19 +53,20 @@ printf "\nDownloading FreeSurfer ..." \
 && mkdir -p ${MAIN_DIR}/freesurfer-${FREESURFER_VERSION} \
 && curl -fsSL --retry 5 https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/${FREESURFER_VERSION}/freesurfer-linux-centos6_x86_64-${FREESURFER_VERSION}.tar.gz \
 | tar -xz -C ${MAIN_DIR}/freesurfer-${FREESURFER_VERSION} --strip-components 1 \
-     --exclude='freesurfer/average/mult-comp-cor' \
-     --exclude='freesurfer/lib/cuda' \
-     --exclude='freesurfer/lib/qt' \
-     --exclude='freesurfer/subjects/V1_average' \
-     --exclude='freesurfer/subjects/bert' \
-     --exclude='freesurfer/subjects/cvs_avg35' \
-     --exclude='freesurfer/subjects/cvs_avg35_inMNI152' \
-     --exclude='freesurfer/subjects/fsaverage3' \
-     --exclude='freesurfer/subjects/fsaverage4' \
-     --exclude='freesurfer/subjects/fsaverage5' \
-     --exclude='freesurfer/subjects/fsaverage6' \
-     --exclude='freesurfer/subjects/fsaverage_sym' \
-     --exclude='freesurfer/trctrain'
+     --exclude='freesurfer/lib/cuda'
+
+     # --exclude='freesurfer/average/mult-comp-cor' \
+     # --exclude='freesurfer/lib/qt' \
+     # --exclude='freesurfer/subjects/V1_average' \
+     # --exclude='freesurfer/subjects/bert' \
+     # --exclude='freesurfer/subjects/cvs_avg35' \
+     # --exclude='freesurfer/subjects/cvs_avg35_inMNI152' \
+     # --exclude='freesurfer/subjects/fsaverage3' \
+     # --exclude='freesurfer/subjects/fsaverage4' \
+     # --exclude='freesurfer/subjects/fsaverage5' \
+     # --exclude='freesurfer/subjects/fsaverage6' \
+     # --exclude='freesurfer/subjects/fsaverage_sym' \
+     # --exclude='freesurfer/trctrain'
 }
 
 ## FSL ##
