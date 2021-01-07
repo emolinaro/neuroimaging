@@ -277,7 +277,7 @@ USAGE_TEXT
 clean_up() {
     ## Remove temporary files/directories, log files or rollback changes.
     trap - ERR EXIT SIGINT SIGTERM
-    sudo rm -rf /tmp/*
+    # sudo rm -rf /tmp/*
     touch /tmp/passwd
 }
 
