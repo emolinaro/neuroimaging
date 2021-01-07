@@ -117,7 +117,7 @@ printf "\nDownloading FSL ..." \
 && mkdir -p ${MAIN_DIR}/fsl-${FSL_VERSION} \
 && curl -fsSL --retry 5 https://fsl.fmrib.ox.ac.uk/fsldownloads/fsl-${FSL_VERSION}-centos6_64.tar.gz \
 | tar -xz -C ${MAIN_DIR}/fsl-${FSL_VERSION} --strip-components 1 \
-&& $FSLDIR/etc/fslconf/fslpython_install.sh -f $FSLDIR
+&& $FSLDIR/etc/fslconf/fslpython_install.sh -f $FSLDIR -q
 
 }
 
