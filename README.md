@@ -18,6 +18,7 @@ OPTIONS:
         Specify the installation path (default is: /work/neuro-software).
 -i, --install
         Specify software name from the following list:
+        - afni
         - freesurfer
         - fsl
         - matlabmcr
@@ -61,6 +62,7 @@ MINICONDA_VERSION=4.7.12 ./neuro.sh --install miniconda
 
 ## Supported software
 
+- [Analysis of Functional Neuro Images (AFNI)](https://afni.nimh.nih.gov/)
 - [FreeSurfer](https://surfer.nmr.mgh.harvard.edu/)
 - [FMRIB Software Library (FSL)](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki)
 - [MATLAB Compiler Runtime (MCR)](https://www.mathworks.com/products/compiler/matlab-runtime.html)
