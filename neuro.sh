@@ -11,6 +11,7 @@ readonly script_name="${0##*/}"
 ##############################
 ## DEFAULT SOFTWARE VERSION ##
 ##############################
+AFNI_VERSION=${AFNI_VERSION:="latest"}
 FREESURFER_VERSION=${FREESURFER_VERSION:="7.1.1"}
 FSL_VERSION=${FSL_VERSION:="6.0.4"}
 MATLAB_VERSION=${MATLAB_VERSION:="97"}
@@ -22,6 +23,59 @@ MINICONDA_VERSION=${MINICONDA_VERSION:="latest"}
 #####################################
 ## SOFTWARE INSTALLATION FUNCTIONS ##
 #####################################
+## AFNI ##
+install_afni() {
+
+env="${FUNCNAME[0]/install/env}-${AFNI_VERSION}.sh"
+
+## Set environment
+{ echo export PATH="${MAIN_DIR}/afni-${AFNI_VERSION}:\$PATH"; \
+  echo export AFNI_PLUGINPATH="${MAIN_DIR}/afni-${AFNI_VERSION}"; } > "${MAIN_DIR}/${env}"
+
+## Software dependencies
+cat >> "${MAIN_DIR}/${env}" << EOF
+sudo apt-get update -qq \
+&& sudo apt-get install -y -qq --no-install-recommends \
+        ed \
+        gsl-bin \
+        libglib2.0-0 \
+        libglu1-mesa-dev \
+        libglw1-mesa \
+        libgomp1 \
+        libjpeg62 \
+        libxm4 \
+        multiarch-support \
+        netpbm \
+        tcsh \
+        xfonts-base \
+        xvfb \
+&& sudo apt-get clean \
+&& sudo rm -rf /var/lib/apt/lists/* \
+&& curl -sSL --retry 5 -o /tmp/toinstall.deb http://mirrors.kernel.org/debian/pool/main/libx/libxp/libxp6_1.0.2-2_amd64.deb \
+&& sudo dpkg --configure -a \
+&& sudo dpkg -i /tmp/toinstall.deb \
+&& rm /tmp/toinstall.deb \
+&& curl -sSL --retry 5 -o /tmp/toinstall.deb http://snapshot.debian.org/archive/debian-security/20160113T213056Z/pool/updates/main/libp/libpng/libpng12-0_1.2.49-1%2Bdeb7u2_amd64.deb \
+&& sudo dpkg -i /tmp/toinstall.deb \
+&& rm /tmp/toinstall.deb \
+&& sudo apt-get install -f \
+&& sudo apt-get clean \
+&& sudo rm -rf /var/lib/apt/lists/* \
+&& gsl2_path="\$(sudo find / -name 'libgsl.so.19' || printf '')" \
+&& if [ -n "\$gsl2_path" ]; then \
+        ln -sfv "\$gsl2_path" "\$(dirname \$gsl2_path)/libgsl.so.0"; \
+   fi \
+&& sudo ldconfig
+EOF
+
+source "${MAIN_DIR}/${env}"
+
+printf "\nDownloading AFNI ...\n" \
+&& mkdir -p ${MAIN_DIR}/afni-${AFNI_VERSION} \
+&& curl -fsSL --retry 5 https://afni.nimh.nih.gov/pub/dist/tgz/linux_openmp_64.tgz \
+| tar -xz -C ${MAIN_DIR}/afni-${AFNI_VERSION} --strip-components 1
+
+}
 
 ## FreeSurfer ##
 install_freesurfer() {
@@ -262,6 +316,7 @@ OPTIONS:
         Specify the installation path (default is: /work/neuro-software).
 -i, --install
         Specify software name from the following list:
+        - afni
         - freesurfer
         - fsl
         - matlabmcr
